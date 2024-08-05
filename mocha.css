@@ -1,0 +1,527 @@
+@charset "utf-8";
+
+@import url('https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+:root {
+  --mocha-color: rgba(98, 98, 98, 1);
+  --color-dim: rgba(117, 117, 117, 1);
+  --mocha-bg-color: rgba(255, 255, 255, 1);
+  --mocha-pass-icon-color: rgba(0, 164, 79, 1);
+  --mocha-pass-color: rgba(255, 255, 255, 1);
+  --mocha-pass-shadow-color: rgba(0, 0, 0, 0.2);
+  --mocha-pass-mediump-color: rgba(192, 152, 83, 1);
+  --mocha-pass-slow-color: rgba(185, 74, 72, 1);
+  --mocha-link-color: rgba(0, 90, 255, 1);
+  --mocha-test-pending-color: rgba(11, 151, 196, 1);
+  --mocha-test-pending-icon-color: rgba(11, 151, 196, 1);
+  --mocha-fail-color: rgba(255, 40, 40, 1);
+  --mocha-fail-icon-color: rgba(255, 40, 40, 1);
+  --mocha-test-fail-pre-color: rgba(0, 0, 0, 1);
+  --mocha-test-fail-pre-error-color: rgba(255, 40, 40, 1);
+  --mocha-test-html-error-color: rgba(0, 0, 0, 1);
+  --mocha-box-shadow-color: rgba(238, 238, 238, 1);
+  --mocha-box-bottom-color: rgba(221, 221, 221, 1);
+  --mocha-test-replay-color: rgba(0, 0, 0, 1);
+  --mocha-test-replay-bg-color: rgba(238, 238, 238, 1);
+  --mocha-stats-color: rgba(136, 136, 136, 1);
+  --mocha-stats-em-color: rgba(0, 0, 0, 1);
+  --mocha-stats-hover-color: rgba(238, 238, 238, 1);
+  --mocha-progress-ring-color: rgba(238, 238, 238, 1);
+  --mocha-progress-ring-highlight-color: rgba(159, 159, 159, 1);
+  --mocha-progress-text-color: rgba(0, 0, 0, 1);
+  --mocha-error-color: rgba(255, 40, 40, 1);
+
+  --mocha-code-comment: rgba(221, 221, 221, 1);
+  --mocha-code-init: rgba(47, 111, 173, 1);
+  --mocha-code-string: rgba(88, 144, 173, 1);
+  --mocha-code-keyword: rgba(138, 99, 67, 1);
+  --mocha-code-number: rgba(47, 111, 173, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --mocha-color: rgba(210, 210, 210, 1);
+    --color-dim: rgba(157, 157, 157, 1);
+    --mocha-bg-color: rgba(34, 34, 34, 1);
+    --mocha-pass-icon-color: rgba(0, 255, 140, 1);
+    --mocha-pass-color: rgba(34, 34, 34, 1);
+    --mocha-pass-shadow-color: rgba(0, 0, 0, 0.2);
+    --mocha-pass-mediump-color: rgb(1, 1, 1);
+    --mocha-pass-slow-color: rgba(244, 152, 150, 1);
+    --mocha-link-color: rgb(0, 172, 255);
+    --mocha-test-pending-color: rgb(73, 167, 255);
+    --mocha-test-pending-icon-color: rgba(11, 151, 196, 1);
+    --mocha-fail-color: rgba(255, 104, 104, 1);
+    --mocha-fail-icon-color: rgba(255, 104, 104, 1);
+    --mocha-test-fail-pre-color: rgba(255, 255, 255, 1);
+    --mocha-test-fail-pre-error-color: rgba(255, 104, 104, 1);
+    --mocha-test-html-error-color: rgba(255, 255, 255, 1);
+    --mocha-box-shadow-color: rgba(68, 68, 68, 1);
+    --mocha-box-bottom-color: rgba(85, 85, 85, 1);
+    --mocha-test-replay-color: rgba(255, 255, 255, 1);
+    --mocha-test-replay-bg-color: rgba(68, 68, 68, 1);
+    --mocha-stats-color: rgba(170, 170, 170, 1);
+    --mocha-stats-em-color: rgba(255, 255, 255, 1);
+    --mocha-stats-hover-color: rgba(68, 68, 68, 1);
+    --mocha-progress-ring-color: rgba(68, 68, 68, 1);
+    --mocha-progress-ring-highlight-color: rgba(136, 136, 136, 1);
+    --mocha-progress-text-color: rgba(255, 255, 255, 1);
+    --mocha-error-color: rgba(255, 104, 104, 1);
+
+    --mocha-code-comment: rgba(221, 221, 221, 1);
+    --mocha-code-init: rgba(156, 199, 241, 1);
+    --mocha-code-string: rgba(128, 212, 255, 1);
+    --mocha-code-keyword: rgba(227, 164, 112, 1);
+    --mocha-code-number: rgba(76, 167, 255, 1);
+  }
+}
+
+body {
+  margin: 0;
+  background-color: var(--mocha-bg-color);
+  color: var(--mocha-color);
+}
+
+.copy-button {
+  border: none;
+  outline: none;
+  background: none;
+  padding: 0;
+  color: inherit;
+  font-size: 1.35rem;
+  line-height: 1rem;
+  margin-left: 0.5rem;
+}
+
+.copying button {
+  pointer-events: none;
+}
+
+#mocha {
+  font: 20px/1.5 'Ubuntu', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  margin: 60px 50px;
+}
+
+#mocha ul,
+#mocha li {
+  margin: 0;
+  padding: 0;
+}
+
+#mocha ul {
+  list-style: none;
+}
+
+#mocha h1,
+#mocha h2 {
+  margin: 0;
+}
+
+#mocha h1 {
+  margin-top: 15px;
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+#mocha h1 a {
+  text-underline-offset: 5px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: rgba(125, 125, 125, 0);
+  color: inherit;
+  transition: text-decoration-color 200ms, color 200ms;
+}
+
+#mocha h1 a:hover {
+  color: var(--mocha-color);
+  text-decoration-color: var(--mocha-link-color);
+  color: var(--mocha-link-color);
+}
+#mocha .suite .suite h1 {
+  margin-top: 0;
+  font-size: 0.8em;
+}
+
+#mocha .hidden {
+  display: none;
+}
+
+#mocha h2 {
+  font-weight: 400;
+  font-size: 0.9rem;
+  font-weight: normal;
+  cursor: pointer;
+  transition: color 200ms;
+  margin-bottom: 0.35rem;
+  line-height: 1.25;
+  user-select: none;
+}
+
+#mocha h2[collapsed='false'] {
+  font-weight: 500;
+}
+
+#mocha .suite {
+  margin-left: 15px;
+}
+
+#mocha .test {
+  margin-left: 15px;
+  overflow: hidden;
+}
+
+#mocha .test.pass {
+  --mocha-test-replay-bg-color: var(--mocha-pass-icon-color);
+  --mocha-test-replay-color: var(--mocha-pass-color);
+}
+
+#mocha .test.pending h2 {
+  color: var(--mocha-test-pending-color);
+  cursor: default;
+}
+#mocha .test.pass h2:hover,
+#mocha .test.pass h2[collapsed='false'] {
+  color: var(--mocha-pass-icon-color);
+}
+
+#mocha .test.pending {
+  opacity: 0.5;
+  transition: opacity 200ms;
+}
+#mocha .test.pending:hover {
+  opacity: 0.9;
+}
+
+#mocha .test.pending h2::after {
+  position: relative;
+  content: ' (pending)';
+  font-family: 'Fira Mono', monospace;
+  left: 0.25rem;
+  font-size: 0.7rem;
+  line-height: 1em;
+  color: var(--mocha-test-pending-color);
+}
+
+#mocha .test.pass.medium .duration {
+  background: var(--mocha-pass-mediump-color);
+}
+
+#mocha .test.pass.slow .duration {
+  background: var(--mocha-pass-slow-color);
+}
+
+#mocha .test.pass::before {
+  content: '✓';
+  font-size: 12px;
+  display: block;
+  float: left;
+  margin-right: 5px;
+  color: var(--mocha-pass-icon-color);
+}
+
+#mocha .test.pass .duration {
+  font-size: 9px;
+  margin-left: 5px;
+  padding: 2px 5px;
+  color: var(--mocha-pass-color);
+  box-shadow: inset 0 1px 1px var(--mocha-pass-shadow-color);
+  border-radius: 5px;
+}
+
+#mocha .test.pass.fast .duration {
+  display: none;
+}
+
+#mocha .test.pending {
+  color: var(--mocha-test-pending-color);
+}
+
+#mocha .test.pending::before {
+  content: '❖';
+  color: var(--mocha-test-pending-icon-color);
+}
+
+#mocha .test.fail {
+  --mocha-test-replay-bg-color: var(--mocha-fail-icon-color);
+  --mocha-test-replay-color: rgba(255, 255, 255, 1);
+  color: var(--mocha-fail-color);
+}
+
+#mocha .test.fail pre {
+  color: var(--mocha-test-fail-pre-color);
+}
+
+#mocha .test.fail::before {
+  content: '✖';
+  font-size: 12px;
+  display: block;
+  float: left;
+  margin-right: 5px;
+  color: var(--mocha-fail-icon-color);
+}
+
+#mocha .test pre.error {
+  color: var(--mocha-test-fail-pre-error-color);
+  max-height: 300px;
+  overflow: auto;
+}
+
+#mocha .test .html-error {
+  overflow: auto;
+  color: var(--mocha-test-html-error-color);
+  display: block;
+  float: left;
+  clear: left;
+  font: 12px/1.5 monaco, monospace;
+  margin: 5px;
+  padding: 15px;
+  border: 1px solid var(--mocha-box-shadow-color);
+  max-width: 85%; /*(1)*/
+  max-width: -webkit-calc(100% - 42px);
+  max-width: -moz-calc(100% - 42px);
+  max-width: calc(100% - 42px); /*(2)*/
+  max-height: 300px;
+  word-wrap: break-word;
+  border-bottom-color: var(--mocha-box-bottom-color);
+  -webkit-box-shadow: 0 1px 3px var(--mocha-box-shadow-color);
+  -moz-box-shadow: 0 1px 3px var(--mocha-box-shadow-color);
+  box-shadow: 0 1px 3px var(--mocha-box-shadow-color);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+
+#mocha .test .html-error pre.error {
+  border: none;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-box-shadow: 0;
+  -moz-box-shadow: 0;
+  box-shadow: 0;
+  padding: 0;
+  margin: 0;
+  margin-top: 18px;
+  max-height: none;
+}
+
+#mocha .test pre {
+  overflow: auto;
+  display: block;
+  float: left;
+  clear: left;
+  font-family: 'Fira Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--color-dim);
+  margin: 1rem 0.5rem;
+  margin-top: 0.25rem;
+  margin-bottom: 1rem;
+
+  width: 100%;
+  max-width: calc(100% - 45px); /*(2)*/
+  word-wrap: break-word;
+  border-bottom-color: var(--mocha-box-bottom-color);
+  box-shadow: 0 0px 1px 0 var(--mocha-box-shadow-color),
+    0 0px 2px 0px var(--mocha-test-replay-bg-color);
+  border-radius: 0.25rem;
+}
+
+#mocha .test h2 {
+  position: relative;
+}
+
+#mocha .test a.replay {
+  position: absolute;
+  top: 3px;
+  right: 0;
+  text-decoration: none;
+  display: flex;
+  width: 14px;
+  height: 14px;
+  line-height: 1;
+  justify-content: center;
+  align-items: center;
+  background: var(--mocha-test-replay-bg-color);
+  font-size: 24px;
+  margin-right: 0.25rem;
+
+  border-radius: 50%;
+  transition: opacity 200ms, transform 200ms;
+  opacity: 0.7;
+  color: var(--mocha-test-replay-color);
+}
+
+#mocha .test:hover a.replay {
+  box-shadow: 0 0 1px inset var(--mocha-test-replay-color);
+  opacity: 1;
+  transform: scale(1.25);
+}
+
+#mocha-report.pass .test.fail {
+  display: none;
+}
+
+#mocha-report.fail .test.pass {
+  display: none;
+}
+
+#mocha-report.pending .test.pass,
+#mocha-report.pending .test.fail {
+  display: none;
+}
+#mocha-report.pending .test.pass.pending {
+  display: block;
+}
+
+#mocha-error {
+  color: var(--mocha-error-color);
+  font-size: 1.5em;
+  font-weight: 100;
+  letter-spacing: 1px;
+}
+
+#mocha-stats {
+  --ring-container-size: 40px;
+  --ring-size: 39px;
+  --ring-radius: calc(var(--ring-size) / 2);
+  cursor: default;
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1rem;
+  margin: 0;
+  color: var(--mocha-stats-color);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: 'Fira Code', monospace;
+  font-weight: 300;
+  font-size: 1rem;
+}
+
+#mocha-stats .progress-contain {
+  float: right;
+  padding: 0;
+  display: none;
+}
+
+#mocha-stats :is(.progress-element, .progress-text) {
+  width: var(--ring-container-size);
+  display: block;
+  top: 12px;
+  position: absolute;
+}
+
+#mocha-stats .progress-element {
+  visibility: hidden;
+  height: calc(var(--ring-container-size) / 2);
+}
+
+#mocha-stats .progress-text {
+  text-align: center;
+  text-overflow: clip;
+  overflow: hidden;
+  color: var(--mocha-stats-em-color);
+  font-size: 11px;
+}
+
+#mocha-stats .progress-ring {
+  width: var(--ring-container-size);
+  height: var(--ring-container-size);
+}
+
+#mocha-stats :is(.ring-flatlight, .ring-highlight) {
+  --stroke-thickness: 1.65px;
+  --center: calc(var(--ring-container-size) / 2);
+  cx: var(--center);
+  cy: var(--center);
+  r: calc(var(--ring-radius) - calc(var(--stroke-thickness) / 2));
+  fill: hsla(0, 0%, 0%, 0);
+  stroke-width: var(--stroke-thickness);
+}
+
+#mocha-stats .ring-flatlight {
+  stroke: var(--mocha-progress-ring-color);
+}
+
+#mocha-stats .ring-highlight {
+  stroke: var(--mocha-progress-ring-highlight-color);
+}
+
+#mocha-stats em {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1em;
+  font-family: 'Fira Code', monospace;
+  color: var(--mocha-pass-icon-color);
+  line-height: 1;
+}
+
+#mocha-stats li {
+  padding: 0.25rem 0.5rem;
+}
+#mocha-stats li.failures em,
+#mocha-stats li.failures {
+  color: var(--mocha-fail-icon-color);
+}
+#mocha-stats li.passes {
+  color: var(--mocha-pass-icon-color);
+  box-shadow: 0 0 3px 1px var(--mocha-pass-icon-color);
+  border-radius: 0.25rem;
+}
+#mocha-stats li.failures {
+  box-shadow: 0 0 3px 1px var(--mocha-fail-icon-color);
+  border-radius: 0.25rem;
+}
+
+#mocha-stats a {
+  text-decoration: underline;
+  text-decoration-color: rgba(125, 125, 125, 0);
+  text-underline-offset: 3px;
+  color: inherit;
+  line-height: 1;
+  transition: text-decoration-color 200ms, color 200ms;
+}
+
+#mocha-stats a:hover {
+  text-decoration-color: var(--mocha-link-color);
+  color: var(--mocha-link-color);
+}
+
+#mocha-stats li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+#mocha-stats li.duration {
+  gap: 0;
+}
+#mocha-stats li.duration em {
+  margin-left: 0.5rem;
+}
+
+#mocha code .comment {
+  color: var(--mocha-code-comment);
+}
+#mocha code .init {
+  color: var(--mocha-code-init);
+}
+#mocha code .string {
+  color: var(--mocha-code-string);
+}
+#mocha code .keyword {
+  color: var(--mocha-code-keyword);
+}
+#mocha code .number {
+  color: var(--mocha-code-number);
+}
+
+@media screen and (max-device-width: 480px) {
+  #mocha {
+    margin: 60px 0px;
+  }
+
+  #mocha #stats {
+    position: absolute;
+  }
+}
