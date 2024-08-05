@@ -36,3 +36,11 @@ To include this package in your project, simply add the following to the `<head>
   ...
 </html>
 ```
+
+## Preview
+
+### Light Mode
+![Preview Light Mode](img/light-mode-preview.png)
+
+### Dark Mode
+![Preview Light Mode](img/dark-mode-preview.png)

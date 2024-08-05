@@ -5,7 +5,8 @@
 :root {
   --mocha-color: rgba(98, 98, 98, 1);
   --color-dim: rgba(117, 117, 117, 1);
-  --mocha-bg-color: rgba(255, 255, 255, 1);
+  --mocha-bg-color: rgba(242, 242, 242, 1);
+  --mocha-bg-light-rgb: 255, 255, 255;
   --mocha-pass-icon-color: rgba(0, 164, 79, 1);
   --mocha-pass-color: rgba(255, 255, 255, 1);
   --mocha-pass-shadow-color: rgba(0, 0, 0, 0.2);
@@ -43,6 +44,7 @@
     --mocha-color: rgba(210, 210, 210, 1);
     --color-dim: rgba(157, 157, 157, 1);
     --mocha-bg-color: rgba(34, 34, 34, 1);
+    --mocha-bg-light-rgb: 24, 24, 24;
     --mocha-pass-icon-color: rgba(0, 255, 140, 1);
     --mocha-pass-color: rgba(34, 34, 34, 1);
     --mocha-pass-shadow-color: rgba(0, 0, 0, 0.2);
@@ -151,7 +153,7 @@ body {
   font-weight: normal;
   cursor: pointer;
   transition: color 200ms;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.25rem;
   line-height: 1.25;
   user-select: none;
 }
@@ -263,6 +265,7 @@ body {
   color: var(--mocha-test-fail-pre-error-color);
   max-height: 300px;
   overflow: auto;
+  padding: 0.5rem 1rem;
 }
 
 #mocha .test .html-error {
@@ -380,9 +383,6 @@ body {
 }
 
 #mocha-stats {
-  --ring-container-size: 40px;
-  --ring-size: 39px;
-  --ring-radius: calc(var(--ring-size) / 2);
   cursor: default;
   position: fixed;
   top: 1rem;
@@ -390,7 +390,12 @@ body {
   font-size: 1rem;
   margin: 0;
   color: var(--mocha-stats-color);
-  z-index: 1;
+  background: rgba(var(--mocha-bg-light-rgb), 0.75);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 0 3px 1px var(--mocha-box-shadow-color);
+  border-radius: 0.5rem;
+  padding: 1rem 1rem;
+  z-index: 100;
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -399,53 +404,9 @@ body {
   font-size: 1rem;
 }
 
-#mocha-stats .progress-contain {
-  float: right;
-  padding: 0;
-  display: none;
-}
-
-#mocha-stats :is(.progress-element, .progress-text) {
-  width: var(--ring-container-size);
-  display: block;
-  top: 12px;
-  position: absolute;
-}
-
+#mocha-stats .progress-contain,
 #mocha-stats .progress-element {
-  visibility: hidden;
-  height: calc(var(--ring-container-size) / 2);
-}
-
-#mocha-stats .progress-text {
-  text-align: center;
-  text-overflow: clip;
-  overflow: hidden;
-  color: var(--mocha-stats-em-color);
-  font-size: 11px;
-}
-
-#mocha-stats .progress-ring {
-  width: var(--ring-container-size);
-  height: var(--ring-container-size);
-}
-
-#mocha-stats :is(.ring-flatlight, .ring-highlight) {
-  --stroke-thickness: 1.65px;
-  --center: calc(var(--ring-container-size) / 2);
-  cx: var(--center);
-  cy: var(--center);
-  r: calc(var(--ring-radius) - calc(var(--stroke-thickness) / 2));
-  fill: hsla(0, 0%, 0%, 0);
-  stroke-width: var(--stroke-thickness);
-}
-
-#mocha-stats .ring-flatlight {
-  stroke: var(--mocha-progress-ring-color);
-}
-
-#mocha-stats .ring-highlight {
-  stroke: var(--mocha-progress-ring-highlight-color);
+  display: none;
 }
 
 #mocha-stats em {
@@ -459,7 +420,9 @@ body {
 
 #mocha-stats li {
   padding: 0.25rem 0.5rem;
+  margin: 0.25rem 0;
 }
+
 #mocha-stats li.failures em,
 #mocha-stats li.failures {
   color: var(--mocha-fail-icon-color);
@@ -468,6 +431,7 @@ body {
   color: var(--mocha-pass-icon-color);
   box-shadow: 0 0 3px 1px var(--mocha-pass-icon-color);
   border-radius: 0.25rem;
+  margin-left: 0.5rem;
 }
 #mocha-stats li.failures {
   box-shadow: 0 0 3px 1px var(--mocha-fail-icon-color);
