@@ -53,7 +53,9 @@ const replaceStyles = async darkMode => {
 };
 
 const highlightBlocks = () => {
-  document.querySelectorAll('pre code').forEach(el => {
+  const codeBlocks = document.querySelectorAll('pre code');
+  console.log(codeBlocks);
+  codeBlocks.forEach(el => {
     el.classList.add('hljs');
     el.classList.add('language-javascript');
 
@@ -95,20 +97,20 @@ const appendCopyButton = el => {
 };
 
 (() => {
+  const existingWinLoad = window.onload;
   window.onload = async () => {
+    existingWinLoad?.();
     await appendScript(cdn.hljs);
     await appendScript(cdn.javascript);
 
-    document.querySelectorAll('pre code').forEach(el => {
-      const darkMode = window.matchMedia('(prefers-color-scheme: dark)');
+    const darkMode = window.matchMedia('(prefers-color-scheme: dark)');
 
-      darkMode.addEventListener('change', async e => {
-        await replaceStyles(e.matches);
-      });
-
-      replaceStyles(darkMode.matches);
-      highlightBlocks();
+    darkMode.addEventListener('change', async e => {
+      await replaceStyles(e.matches);
     });
+
+    replaceStyles(darkMode.matches);
+    highlightBlocks();
 
     document.querySelectorAll('li h2').forEach(appendCopyButton);
   };
