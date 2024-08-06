@@ -54,7 +54,7 @@ const replaceStyles = async darkMode => {
 
 const highlightBlocks = () => {
   const codeBlocks = document.querySelectorAll('pre code');
-  console.log(codeBlocks);
+
   codeBlocks.forEach(el => {
     el.classList.add('hljs');
     el.classList.add('language-javascript');
