@@ -120,7 +120,7 @@ body {
 }
 
 #mocha h1 {
-  margin-top: 15px;
+  margin-top: 1rem;
   font-size: 1.1rem;
   font-weight: 400;
 }
@@ -138,9 +138,9 @@ body {
   text-decoration-color: var(--mocha-link-color);
   color: var(--mocha-link-color);
 }
+
 #mocha .suite .suite h1 {
-  margin-top: 0;
-  font-size: 0.8em;
+  margin-top: 0.25rem;
 }
 
 #mocha .hidden {
@@ -177,9 +177,10 @@ body {
 }
 
 #mocha .test.pending h2 {
-  color: var(--mocha-test-pending-color);
+  color: var(--mocha-test-pending-color) !important;
   cursor: default;
 }
+
 #mocha .test.pass h2:hover,
 #mocha .test.pass h2[collapsed='false'] {
   color: var(--mocha-pass-icon-color);
