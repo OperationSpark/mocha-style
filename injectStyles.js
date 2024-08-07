@@ -96,22 +96,27 @@ const appendCopyButton = el => {
   });
 };
 
+const init = async () => {
+  await appendScript(cdn.hljs);
+  await appendScript(cdn.javascript);
+
+  const darkMode = window.matchMedia('(prefers-color-scheme: dark)');
+
+  darkMode.addEventListener('change', async e => {
+    await replaceStyles(e.matches);
+  });
+
+  replaceStyles(darkMode.matches);
+  highlightBlocks();
+
+  document.querySelectorAll('li h2').forEach(appendCopyButton);
+};
+
 (() => {
   const existingWinLoad = window.onload;
-  window.onload = async () => {
+  window.onload = () => {
     existingWinLoad?.();
-    await appendScript(cdn.hljs);
-    await appendScript(cdn.javascript);
 
-    const darkMode = window.matchMedia('(prefers-color-scheme: dark)');
-
-    darkMode.addEventListener('change', async e => {
-      await replaceStyles(e.matches);
-    });
-
-    replaceStyles(darkMode.matches);
-    highlightBlocks();
-
-    document.querySelectorAll('li h2').forEach(appendCopyButton);
+    setTimeout(init, 250);
   };
 })();
