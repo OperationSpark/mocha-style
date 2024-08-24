@@ -1,3 +1,15 @@
+/**
+ * @typedef {{
+ *   highlight: (
+ *    text: string,
+ *    options: { language: 'javascript' | 'markdown'}
+ *  ) => { value: string },
+ * }} HLJS
+ */
+
+/** @type { HLJS } */
+const hljs = window['hljs'];
+
 const cdn = {
   stylesheets: {
     dark: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/atom-one-dark.min.css',
@@ -6,7 +18,9 @@ const cdn = {
   },
   hljs: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js',
   javascript:
-    'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/languages/javascript.min.js'
+    'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/languages/javascript.min.js',
+  markdown:
+    'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/languages/markdown.min.js'
 };
 
 const appendScript = src => {
@@ -56,12 +70,36 @@ const highlightBlocks = () => {
   const codeBlocks = document.querySelectorAll('pre code');
 
   codeBlocks.forEach(el => {
+    if (!el.textContent) return;
     el.classList.add('hljs');
     el.classList.add('language-javascript');
 
     el.innerHTML = hljs.highlight(el.textContent, {
       language: 'javascript'
     }).value;
+  });
+};
+
+const highlightDescriptions = () => {
+  document.querySelectorAll('.test h2').forEach(el => {
+    const text = el.childNodes[0]?.textContent;
+    if (!text) return;
+
+    const html = hljs.highlight(text, {
+      language: 'markdown'
+    }).value;
+
+    const d = document.createElement('span');
+
+    d.innerHTML = html;
+
+    d.querySelectorAll('.hljs-code').forEach(el => {
+      if (el instanceof HTMLElement) {
+        el.innerText = el.innerText.slice(1, -1);
+      }
+    });
+
+    el.replaceChild(d, el.childNodes[0]);
   });
 };
 
@@ -107,6 +145,7 @@ const init = async () => {
   });
 
   replaceStyles(darkMode.matches);
+  highlightDescriptions();
   highlightBlocks();
 
   document.querySelectorAll('li h2').forEach(appendCopyButton);
@@ -115,6 +154,7 @@ const init = async () => {
 (() => {
   const existingWinLoad = window.onload;
   window.onload = () => {
+    // @ts-expect-error
     existingWinLoad?.();
 
     setTimeout(init, 250);

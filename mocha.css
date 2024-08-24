@@ -37,6 +37,10 @@
   --mocha-code-string: rgba(88, 144, 173, 1);
   --mocha-code-keyword: rgba(138, 99, 67, 1);
   --mocha-code-number: rgba(47, 111, 173, 1);
+
+  --hljs-code-color: rgb(255, 255, 255);
+  --hljs-code-bg: rgb(55, 29, 255);
+  --hljs-code-shadow: rgba(0, 0, 0, 0.2);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -75,6 +79,10 @@
     --mocha-code-string: rgba(128, 212, 255, 1);
     --mocha-code-keyword: rgba(227, 164, 112, 1);
     --mocha-code-number: rgba(76, 167, 255, 1);
+
+    --hljs-code-bg: rgba(60, 60, 60, 1);
+    --hljs-code-color: rgba(0, 255, 140, 1);;
+    --hljs-code-shadow:  rgba(124, 124, 124, 1);
   }
 }
 
@@ -97,6 +105,24 @@ body {
 
 .copying button {
   pointer-events: none;
+}
+
+.hljs-code {
+  padding: 0;
+  margin: 0;
+  background: var(--hljs-code-bg);
+  color: var(--hljs-code-color);
+  transition: inherit;
+  box-shadow: 0 0 3px 0px var(--hljs-code-shadow) inset;
+  padding: 2px 5px;
+  border-radius: 0.25rem;
+  margin: 0 2px;
+  font-family: 'Fira Mono', monospace;
+  font-size: 0.9em;
+}
+
+#mocha h2:hover .hljs-code {
+  color: inherit;
 }
 
 #mocha {
