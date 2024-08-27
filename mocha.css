@@ -2,6 +2,8 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
 
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 :root {
   --mocha-color: rgba(98, 98, 98, 1);
   --color-dim: rgba(117, 117, 117, 1);
@@ -37,6 +39,16 @@
   --mocha-code-string: rgba(88, 144, 173, 1);
   --mocha-code-keyword: rgba(138, 99, 67, 1);
   --mocha-code-number: rgba(47, 111, 173, 1);
+
+  --prism-code-bg: rgba(255, 255, 255, 1);
+  --prism-code-color: rgba(140, 0, 255, 1);
+  --prism-code-shadow: rgba(172, 172, 172, 1);
+
+  --prism-token: rgb(0, 115, 255);
+  --prism-token-keyword: rgb(150, 80, 255);
+  --prism-token-function: rgb(212, 159, 0);
+  --prism-token-comment: rgba(0, 195, 255, 1);
+  --prism-token-string: rgb(255, 112, 41);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -75,6 +87,16 @@
     --mocha-code-string: rgba(128, 212, 255, 1);
     --mocha-code-keyword: rgba(227, 164, 112, 1);
     --mocha-code-number: rgba(76, 167, 255, 1);
+
+    --prism-code-bg: rgba(60, 60, 60, 1);
+    --prism-code-color: rgba(0, 255, 140, 1);
+    --prism-code-shadow: rgba(124, 124, 124, 1);
+
+    --prism-token: rgb(140, 217, 255);
+    --prism-token-keyword: rgb(230, 125, 255);
+    --prism-token-function: rgb(255, 199, 100);
+    --prism-token-comment: rgba(0, 195, 255, 0.5);
+    --prism-token-string: rgb(255, 168, 124);
   }
 }
 
@@ -99,8 +121,61 @@ body {
   pointer-events: none;
 }
 
+.prism-code {
+  padding: 0;
+  margin: 0;
+  background: var(--prism-code-bg);
+  color: var(--prism-code-color);
+  transition: inherit;
+  box-shadow: 0 0 3px 0px var(--prism-code-shadow) inset;
+  padding: 2px 5px;
+  border-radius: 0.25rem;
+  margin: 0 2px;
+  font-family: 'Fira Mono', monospace;
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+.prism-bold {
+  font-weight: 700;
+}
+.prism-italic {
+  font-style: italic;
+}
+
+#mocha .language-javascript {
+  color: var(--prism-token);
+  font-weight: 400;
+  font-size: 12px;
+  font-family: 'Fira Mono', monospace;
+  line-height: 1.5;
+}
+#mocha .language-javascript .token.keyword {
+  color: var(--prism-token-keyword);
+}
+
+#mocha .language-javascript .token.function {
+  color: var(--prism-token-function);
+}
+
+#mocha .language-javascript .token.string {
+  color: var(--prism-token-string);
+}
+#mocha .language-javascript .token.comment {
+  color: var(--prism-token-comment);
+}
+
+#mocha h2:hover .hljs-code {
+  color: inherit;
+}
+
+#mocha .test-description {
+  color: inherit;
+}
+
 #mocha {
-  font: 20px/1.5 'Ubuntu', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font: 16px/1.5 'Montserrat', 'Ubuntu', 'Helvetica Neue', Helvetica, Arial,
+    sans-serif;
   margin: 60px 50px;
 }
 
@@ -149,13 +224,15 @@ body {
 
 #mocha h2 {
   font-weight: 400;
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: normal;
   cursor: pointer;
   transition: color 200ms;
-  margin-bottom: 0.25rem;
-  line-height: 1.25;
+  margin-bottom: 0.5rem;
+  line-height: 1.35;
   user-select: none;
+  color: inherit;
+  word-spacing: 0.15em;
 }
 
 #mocha h2[collapsed='false'] {
@@ -215,10 +292,12 @@ body {
 
 #mocha .test.pass::before {
   content: '✓';
-  font-size: 12px;
-  display: block;
+  font-size: 15px;
+  display: inline-flex;
   float: left;
-  margin-right: 5px;
+  align-items: center;
+
+  margin-right: 0.5rem;
   color: var(--mocha-pass-icon-color);
 }
 
@@ -256,10 +335,10 @@ body {
 
 #mocha .test.fail::before {
   content: '✖';
-  font-size: 12px;
-  display: block;
+  font-size: 15px;
+  display: flex;
   float: left;
-  margin-right: 5px;
+  margin-right: 0.5rem;
   color: var(--mocha-fail-icon-color);
 }
 
@@ -268,6 +347,8 @@ body {
   max-height: 300px;
   overflow: auto;
   padding: 0.5rem 1rem;
+  margin-bottom: 0.25rem;
+  text-wrap: wrap;
 }
 
 #mocha .test .html-error {
@@ -309,17 +390,38 @@ body {
   max-height: none;
 }
 
+#mocha li.test.pass:has([collapsed="false"]) {
+  background: rgba(var(--mocha-bg-light-rgb), 0.75);
+  box-shadow: 0 0 3px 0px var(--mocha-pass-icon-color);
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+  padding-right: 0.25rem;
+  margin-bottom: 1rem;
+  margin-left: -0.25rem;
+  margin-right: -0.25rem;
+}
+#mocha li.test.fail:has([collapsed="false"]) {
+  background: rgba(var(--mocha-bg-light-rgb), 0.75);
+  box-shadow: 0 0 3px 0px var(--mocha-fail-icon-color);
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+  padding-right: 0.25rem;
+  margin-bottom: 1rem;
+  margin-left: -0.25rem;
+  margin-right: -0.25rem;
+}
+
 #mocha .test pre {
   overflow: auto;
   display: block;
   float: left;
   clear: left;
   font-family: 'Fira Mono', monospace;
-  font-size: 0.8rem;
   color: var(--color-dim);
   margin: 1rem 0.5rem;
   margin-top: 0.25rem;
   margin-bottom: 1rem;
+  padding: 0.5rem;
 
   width: 100%;
   max-width: calc(100% - 45px); /*(2)*/
@@ -328,6 +430,14 @@ body {
   box-shadow: 0 0px 1px 0 var(--mocha-box-shadow-color),
     0 0px 2px 0px var(--mocha-test-replay-bg-color);
   border-radius: 0.25rem;
+  font-size: 0.8rem;
+}
+
+#mocha pre.language-javascript {
+  max-width: calc(100% - 30px);
+}
+#mocha code.language-javascript {
+  font-size: 0.8rem;
 }
 
 #mocha .test h2 {
@@ -354,6 +464,8 @@ body {
   opacity: 0.7;
   color: var(--mocha-test-replay-color);
 }
+
+
 
 #mocha .test:hover a.replay {
   box-shadow: 0 0 1px inset var(--mocha-test-replay-color);

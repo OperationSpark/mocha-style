@@ -1,23 +1,36 @@
+/** @typedef {import('prismjs')}  */
+
+const getMarked = () => {};
+
 const cdn = {
   stylesheets: {
-    dark: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/atom-one-dark.min.css',
+    dark: 'https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.9.0/prism-vsc-dark-plus.min.css',
+
     light:
-      'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/atom-one-light.min.css'
+      'https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.9.0/prism-vs.min.css'
   },
-  hljs: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js',
   javascript:
-    'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/languages/javascript.min.js'
+    'https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-javascript.min.js',
+  markdown:
+    'https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-markdown.min.js',
+
+  prism: 'https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/prism.min.js'
 };
 
-const appendScript = src => {
-  return new Promise((resolve, reject) => {
-    const script = document.createElement('script');
-    script.src = src;
+const appendScript = async src => {
+  if (!src) return console.error('No script provided');
+  try {
+    await new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = src;
 
-    script.onload = resolve;
-    script.onerror = reject;
-    document.head.appendChild(script);
-  });
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  } catch (err) {
+    console.error(`Error appending script: ${src}`);
+  }
 };
 
 const appendStylesheet = async href => {
@@ -29,7 +42,7 @@ const appendStylesheet = async href => {
     link.onload = resolve;
     link.onerror = reject;
 
-    document.head.appendChild(link);
+    document.head.prepend(link);
   });
 };
 
@@ -56,16 +69,81 @@ const highlightBlocks = () => {
   const codeBlocks = document.querySelectorAll('pre code');
 
   codeBlocks.forEach(el => {
-    el.classList.add('hljs');
-    el.classList.add('language-javascript');
+    // const alreadyHighlighted =
+    //   el.classList.contains('language-javascript') ||
+    //   el.parentElement?.classList.contains('language-javascript');
 
-    el.innerHTML = hljs.highlight(el.textContent, {
-      language: 'javascript'
-    }).value;
+    // if (alreadyHighlighted) {
+    //   console.log({ alreadyHighlighted, text: el.textContent });
+    //   return;
+    // }
+    try {
+      if (!el.textContent) return;
+      el.parentElement?.classList.add('language-javascript');
+      el.classList.add('language-javascript');
+
+      el.innerHTML = Prism.highlight(
+        el.textContent,
+        Prism.languages.javascript,
+        'javascript'
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  });
+};
+
+const highlightDescriptions = () => {
+  document.querySelectorAll('.test h2').forEach(el => {
+    const text = el.childNodes[0]?.textContent;
+    const alreadyHighlighted = el.querySelector('.test-description');
+
+    if (!text || alreadyHighlighted) return;
+    try {
+      const html = Prism.highlight(text, Prism.languages.markdown, 'markdown');
+
+      const d = document.createElement('span');
+
+      d.className = 'test-description';
+      d.innerHTML = html;
+
+      d.querySelectorAll('.token.code.keyword').forEach(el => {
+        if (el instanceof HTMLElement) {
+          el.innerText = el.innerText.slice(1, -1);
+          el.className = 'prism-code';
+        }
+      });
+      d.querySelectorAll('.token.bold').forEach(el => {
+        if (el instanceof HTMLElement) {
+          el.innerText = el.innerText.slice(2, -2);
+          el.className = 'prism-bold';
+        }
+      });
+      d.querySelectorAll('.token.italic').forEach(el => {
+        if (el instanceof HTMLElement) {
+          el.innerText = el.innerText.slice(1, -1);
+          el.className = 'prism-italic';
+        }
+      });
+
+      d.childNodes.forEach(el => {
+        if (el instanceof HTMLElement && !el.className?.startsWith('prism-')) {
+          el.outerHTML = el.innerText;
+        }
+      });
+
+      el.replaceChild(d, el.childNodes[0]);
+    } catch (err) {
+      console.error(`Error parsing text: "${text}"`);
+    }
   });
 };
 
 const appendCopyButton = el => {
+  const hasCopyBtn = el.querySelector('button.copy-button');
+
+  if (hasCopyBtn) return;
+
   el.setAttribute('collapsed', 'true');
   el.addEventListener('click', () => {
     const state = el.getAttribute('collapsed') === 'true' ? false : true;
@@ -97,26 +175,32 @@ const appendCopyButton = el => {
 };
 
 const init = async () => {
-  await appendScript(cdn.hljs);
-  await appendScript(cdn.javascript);
-
   const darkMode = window.matchMedia('(prefers-color-scheme: dark)');
 
   darkMode.addEventListener('change', async e => {
     await replaceStyles(e.matches);
   });
 
-  replaceStyles(darkMode.matches);
+  await replaceStyles(darkMode.matches);
+  highlightDescriptions();
   highlightBlocks();
 
   document.querySelectorAll('li h2').forEach(appendCopyButton);
 };
 
-(() => {
+(async () => {
+  await appendScript(cdn.prism);
+  await appendScript(cdn.javascript);
+  await appendScript(cdn.markdown);
+
   const existingWinLoad = window.onload;
-  window.onload = () => {
+
+  window.onload =  () => {
+    // @ts-expect-error
     existingWinLoad?.();
 
-    setTimeout(init, 250);
+    var afterTest =
+      window['after'] || window['afterAll'] || (fn => setTimeout(fn, 0));
+    after(() => setTimeout(init, 250));
   };
 })();
