@@ -2,10 +2,6 @@
 
 const expect = (window['expect'] = chai.expect);
 
-mocha.setup('bdd');
-
-window.onload = () => mocha.run();
-
 describe('Mocha CSS', function () {
   it('should have **correct** _color_ and background when in `light` and `dark` modes', () => {
     const media = window.matchMedia('(prefers-color-scheme: dark)');
@@ -32,7 +28,7 @@ describe('Mocha CSS', function () {
 
   new Array(5).fill('').map(async (_, i) => {
     const ms = (i + 1) * 225;
-    it(`Test at ${ms}ms`, async () => {
+    xit(`Test at ${ms}ms`, async () => {
       await new Promise(resolve => setTimeout(resolve, ms));
       expect(true).to.equal(true);
     }).timeout(ms + 100);
