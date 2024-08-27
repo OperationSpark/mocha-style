@@ -2,6 +2,49 @@
 
 const getMarked = () => {};
 
+const icons = {
+  default:
+    'https://raw.githubusercontent.com/OperationSpark/mocha-style/main/img/icons/mocha.ico',
+  pass: 'https://raw.githubusercontent.com/OperationSpark/mocha-style/main/img/icons/pass.ico',
+  fail: 'https://raw.githubusercontent.com/OperationSpark/mocha-style/main/img/icons/fail.ico'
+};
+
+const updateFavicon = failures => {
+  const useDefault = typeof failures !== 'number';
+
+  /**@type {HTMLLinkElement | null} */
+  let favicon = document.querySelector('link[rel="icon"]');
+
+  if (!favicon) {
+    favicon = document.createElement('link');
+    favicon.rel = 'icon';
+    document.head.appendChild(favicon);
+  }
+
+  if (useDefault) {
+    favicon.href = icons.default;
+    return;
+  }
+
+  favicon.href = !failures ? icons.pass : icons.fail;
+};
+
+const getScriptAttribute = name => {
+  const attribute = document.currentScript?.getAttribute(name);
+  if (attribute === 'true' || attribute === '') return true;
+  if (!attribute || attribute === 'false') return false;
+
+  return attribute;
+};
+
+const scriptConfig = {
+  runMocha: getScriptAttribute('runMocha')
+};
+
+if (scriptConfig.runMocha && typeof mocha !== 'undefined') {
+  mocha.setup('bdd');
+}
+
 const cdn = {
   stylesheets: {
     dark: 'https://cdnjs.cloudflare.com/ajax/libs/prism-themes/1.9.0/prism-vsc-dark-plus.min.css',
@@ -66,27 +109,22 @@ const replaceStyles = async darkMode => {
 };
 
 const highlightBlocks = () => {
-  const codeBlocks = document.querySelectorAll('pre code');
+  const preBlocks = document.querySelectorAll('.test pre');
 
-  codeBlocks.forEach(el => {
-    // const alreadyHighlighted =
-    //   el.classList.contains('language-javascript') ||
-    //   el.parentElement?.classList.contains('language-javascript');
+  preBlocks.forEach(preBlock => {
+    const $code = preBlock.querySelector('code');
+    if (!$code?.textContent) return;
 
-    // if (alreadyHighlighted) {
-    //   console.log({ alreadyHighlighted, text: el.textContent });
-    //   return;
-    // }
+    $code.className = 'language-javascript';
+
     try {
-      if (!el.textContent) return;
-      el.parentElement?.classList.add('language-javascript');
-      el.classList.add('language-javascript');
-
-      el.innerHTML = Prism.highlight(
-        el.textContent,
+      const code = Prism.highlight(
+        $code.textContent,
         Prism.languages.javascript,
         'javascript'
       );
+
+      $code.innerHTML = code;
     } catch (err) {
       console.error(err);
     }
@@ -141,8 +179,8 @@ const highlightDescriptions = () => {
 
 const appendCopyButton = el => {
   const hasCopyBtn = el.querySelector('button.copy-button');
-
-  if (hasCopyBtn) return;
+  const isPending = el.parentElement.classList.contains('pending');
+  if (hasCopyBtn || isPending) return;
 
   el.setAttribute('collapsed', 'true');
   el.addEventListener('click', () => {
@@ -162,12 +200,32 @@ const appendCopyButton = el => {
     e.stopPropagation();
     el.classList.add('copying');
     navigator.clipboard.writeText(text).then(() => {
+      const initialStyles = {
+        fontSize: copyButton.style.fontSize,
+        boxShadow: copyButton.style.boxShadow,
+        color: copyButton.style.color,
+        cursor: copyButton.style.cursor,
+        padding: copyButton.style.padding
+      };
+      const copyStyles = {
+        fontSize: '0.7rem',
+        boxShadow: '0 0 1px 1px var(--mocha-pass-icon-color)',
+        color: 'var(--mocha-pass-icon-color)',
+        cursor: 'default',
+        padding: '0 0.5rem'
+      };
       copyButton.textContent = 'Copied!';
-      copyButton.style.fontSize = 'inherit';
+
+      Object.entries(copyStyles).forEach(([key, value]) => {
+        copyButton.style[key] = value;
+      });
 
       setTimeout(() => {
         copyButton.textContent = '⎘';
-        copyButton.style.fontSize = '1.35rem';
+        Object.entries(initialStyles).forEach(([key, value]) => {
+          copyButton.style[key] = value;
+        });
+
         el.classList.remove('copying');
       }, 1000);
     });
@@ -195,12 +253,21 @@ const init = async () => {
 
   const existingWinLoad = window.onload;
 
-  window.onload =  () => {
+  window.onload = async () => {
+    updateFavicon();
     // @ts-expect-error
     existingWinLoad?.();
 
     var afterTest =
       window['after'] || window['afterAll'] || (fn => setTimeout(fn, 0));
-    after(() => setTimeout(init, 250));
+
+    afterTest(() => {
+      init();
+    });
+
+    if (scriptConfig.runMocha && typeof mocha !== 'undefined') {
+      // mocha.setup('bdd');
+      mocha.run(updateFavicon);
+    }
   };
 })();
