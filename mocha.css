@@ -197,7 +197,7 @@ body {
 #mocha h1 {
   margin-top: 1rem;
   font-size: 1.1rem;
-  font-weight: 400;
+  font-weight: 600;
 }
 
 #mocha h1 a {
@@ -228,7 +228,7 @@ body {
   font-weight: normal;
   cursor: pointer;
   transition: color 200ms;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
   line-height: 1.35;
   user-select: none;
   color: inherit;
@@ -390,23 +390,25 @@ body {
   max-height: none;
 }
 
-#mocha li.test.pass:has([collapsed="false"]) {
+#mocha li.test.pass:has([collapsed='false']) {
   background: rgba(var(--mocha-bg-light-rgb), 0.75);
   box-shadow: 0 0 3px 0px var(--mocha-pass-icon-color);
   border-radius: 0.25rem;
   padding: 0.5rem 1rem;
   padding-right: 0.25rem;
+  margin-top: 0.5rem;
   margin-bottom: 1rem;
   margin-left: -0.25rem;
   margin-right: -0.25rem;
 }
-#mocha li.test.fail:has([collapsed="false"]) {
+#mocha li.test.fail:has([collapsed='false']) {
   background: rgba(var(--mocha-bg-light-rgb), 0.75);
   box-shadow: 0 0 3px 0px var(--mocha-fail-icon-color);
   border-radius: 0.25rem;
   padding: 0.5rem 1rem;
-  padding-right: 0.25rem;
+  margin-top: 0.5rem;
   margin-bottom: 1rem;
+  padding-right: 0.25rem;
   margin-left: -0.25rem;
   margin-right: -0.25rem;
 }
@@ -464,8 +466,6 @@ body {
   opacity: 0.7;
   color: var(--mocha-test-replay-color);
 }
-
-
 
 #mocha .test:hover a.replay {
   box-shadow: 0 0 1px inset var(--mocha-test-replay-color);
