@@ -1,6 +1,11 @@
 /** @typedef {import('chai')} */
 
+
+
 const expect = (window['expect'] = chai.expect);
+
+mocha.setup('bdd');
+window.onload = () => mocha.run(injectStyles.start);
 
 describe('Mocha CSS', function () {
   it('should have **correct** _color_ and background when in `light` and `dark` modes', () => {

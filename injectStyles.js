@@ -60,8 +60,14 @@ const cdn = {
   prism: 'https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/prism.min.js'
 };
 
+const scriptExists = src => {
+  const scripts = Array.from(document.querySelectorAll('script'));
+  return scripts.some(el => el.src === src);
+};
+
 const appendScript = async src => {
   if (!src) return console.error('No script provided');
+  if (scriptExists(src)) return;
   try {
     await new Promise((resolve, reject) => {
       const script = document.createElement('script');
@@ -113,6 +119,11 @@ const highlightBlocks = () => {
 
   preBlocks.forEach(preBlock => {
     const $code = preBlock.querySelector('code');
+
+    const classList = [...preBlock.classList, ...($code?.classList ?? [])];
+    // Already highlighted
+    if (classList.includes('language-javascript')) return;
+
     if (!$code?.textContent) return;
 
     $code.className = 'language-javascript';
@@ -235,15 +246,65 @@ const appendCopyButton = el => {
 const init = async () => {
   const darkMode = window.matchMedia('(prefers-color-scheme: dark)');
 
-  darkMode.addEventListener('change', async e => {
-    await replaceStyles(e.matches);
-  });
+  darkMode.addEventListener('change', e => replaceStyles(e.matches));
 
-  await replaceStyles(darkMode.matches);
+  replaceStyles(darkMode.matches);
   highlightDescriptions();
-  highlightBlocks();
+  setTimeout(highlightBlocks, 0);
 
   document.querySelectorAll('li h2').forEach(appendCopyButton);
+};
+
+const load = cb => {
+  return () => {
+    updateFavicon();
+
+    cb?.();
+
+    var afterTest =
+      window['after'] || window['afterAll'] || (fn => setTimeout(fn, 0));
+
+    afterTest(init);
+
+    if (
+      scriptConfig.runMocha &&
+      typeof mocha !== 'undefined' &&
+      // @ts-expect-error - _state exists on mocha if defined
+      mocha._state !== 'running'
+    ) {
+      try {
+        mocha.setup('bdd');
+        mocha.run(updateFavicon);
+      } catch (err) {
+        console.error(
+          'Mocha instance already running. If you did not intend to have mocha run automatically [mocha.run()] and instead are running manually in the app, remove the `runMocha` attribute from the script tag.'
+        );
+      }
+    }
+  };
+};
+
+/**
+ * @typedef {{
+ *  init: () => void;
+ *  load: (cb?: () => void) => () => void;
+ *  updateFavicon: (failures?: number) => void;
+ *  appendCopyButton: (el: HTMLElement) => void;
+ *  highlightDescriptions: () => void;
+ *  highlightBlocks: () => void;
+ *  start: (failures?: number) => void;
+ * }} InjectStyles
+ */
+
+/** @type {InjectStyles} */
+var injectStyles = {
+  init,
+  load,
+  updateFavicon,
+  appendCopyButton,
+  highlightDescriptions,
+  highlightBlocks,
+  start: failures => load(() => updateFavicon(failures))()
 };
 
 (async () => {
@@ -251,23 +312,7 @@ const init = async () => {
   await appendScript(cdn.javascript);
   await appendScript(cdn.markdown);
 
-  const existingWinLoad = window.onload;
+  window.onload = load(window.onload);
 
-  window.onload = async () => {
-    updateFavicon();
-    // @ts-expect-error
-    existingWinLoad?.();
-
-    var afterTest =
-      window['after'] || window['afterAll'] || (fn => setTimeout(fn, 0));
-
-    afterTest(() => {
-      init();
-    });
-
-    if (scriptConfig.runMocha && typeof mocha !== 'undefined') {
-      // mocha.setup('bdd');
-      mocha.run(updateFavicon);
-    }
-  };
+  window['injectStyles'] = injectStyles;
 })();

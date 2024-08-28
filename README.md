@@ -39,6 +39,14 @@ To include this package in your project, simply add the following to the `<head>
     ></script>
 
     ...
+    <script>
+      // Optionally, you can pass the failures to `injectStyles.start()` to trigger a cleanup
+      mocha.setup('bdd');
+
+      window.onload = () => mocha.run(injectStyles.start);
+    </script>
+
+    ...
   </head>
   ...
 </html>
