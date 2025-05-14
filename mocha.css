@@ -525,6 +525,7 @@ body {
   font-size: 1rem;
 }
 
+#mocha #mocha-stats .progress,
 #mocha-stats .progress-contain,
 #mocha-stats .progress-element {
   display: none;
